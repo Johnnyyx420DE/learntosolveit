@@ -6,77 +6,34 @@
  * C comments do not nest
  *
  */
-
-#include<stdio.h>
-
-void rcomment(int c);
-void incomment(void);
-void echo_quote(int c);
-
-int main(void)
-{
-	int c,d;
-
-	printf(" To Check /* Quoted String */ \n");
-
-	while((c=getchar())!=EOF)
-		rcomment(c);
-
+// Aufgabe1-23 Schreiben Sie ein Programm, welches Kommentare aus einem C- Programm löscht
+#include <stdio.h>
+#define MAXLINE 1000000
+int main(void) {
+	int c, j;
+	int len = 0;		
+	char line[MAXLINE];	
+	while ((c = getchar()) != EOF) {
+		line[len] = c;
+		len++;
+	}
+	for (j = 0; j < len; j++) {
+		if (line[j] == '/' && line[j + 1] == '/') {	 
+			while (line[j] != '\n') {
+				++j;
+			}
+		}
+		else if (line[j] == '/' && line[j + 1] == '*') {
+			++j;
+			++j;
+			 
+			while ((line[j] == '*' && line[j + 1] == '/')  || line[j] != '/') {
+				++j;	
+			}
+		}
+		else {
+			printf("%c", line[j]);
+		}
+	}
 	return 0;
-}
-
-void rcomment(int c)
-{
-	int d;
-
-	if( c == '/')
-	{
-		if((d=getchar())=='*')
-		 incomment();
-		else if( d == '/')
-		{
-			putchar(c);
-			rcomment(d);
-		}
-		else 
-		{
-			putchar(c);
-			putchar(d);
-		}
-	}
-	else if( c == '\''|| c == '"')
-		echo_quote(c);
-	else
-		putchar(c);
-
-}
-
-void incomment()
-{
-	int c,d;
-	 
-	c = getchar();
-	d = getchar();
-
-	while(c!='*' || d !='/')
-	{
-		c =d;
-		d = getchar();
-	}
-}
-
-void echo_quote(int c)
-{
-	int d;
-
-	putchar(c);
-	
-	while((d=getchar())!=c)
-	{
-		putchar(d);
-		
-		if(d == '\\')
-			putchar(getchar());
-	}
-	putchar(d);
 }
